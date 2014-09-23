@@ -8,7 +8,7 @@ var app = express();
 // -------------- environments --------------
 app.use(express.cookieParser('very secret'));
 app.use(express.session());
-app.set('port', process.env.PORT || 3789);
+app.set('port', process.env.PORT || 3200);
 app.use(app.router);
 app.use(express.static(path.join(__dirname, 'public')));
 
