@@ -3,9 +3,9 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="/js/jquery-1.7.1.min.js"></script>
-    <script src="/js/iscroll.js"></script>
-    <script src="/js/drawSegmentSelected.js"></script>
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/iscroll.js"></script>
+    <script src="js/drawSegmentSelected.js"></script>
     <script src="js/jquery.mobile-1.4.2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 </head>
@@ -18,11 +18,6 @@
     }
     document.addEventListener('DOMContentLoaded', loaded, false);
 </script>
-<p id="pos-x"></p>
-<p id="pos-y"></p>
-<p id="zoomed"></p>
-<p id="x-touch"></p>
-<p id="y-touch"></p>
 <div id="ruler">
     <img src="images/ruler.JPG">
 </div>
@@ -30,11 +25,16 @@
     <img tyle="position:absolute" src="images/Hydrangeas.jpg" alt="">
     <div id="segment-selected" style="position:absolute"></div>
 </div>
+<p id="pos-x"></p>
+<p id="pos-y"></p>
+<p id="zoomed"></p>
+<p id="x-touch"></p>
+<p id="y-touch"></p>
 </body>
 
 <script>
     $(document).ready(function () {
-        $('#wrapper').bind('click', function(event){
+        $('#wrapper img').bind('click', function(event){
             var scale = $("#zoomed").text();
             if(scale=="") scale = 1;
             var xDiv = event.clientX - $('#wrapper').position().left;
