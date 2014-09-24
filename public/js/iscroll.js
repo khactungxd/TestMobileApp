@@ -524,7 +524,7 @@ iScroll.prototype = {
 			that.scale = scale;
 
       // modifire by Tung
-      doc.getElementById("zoomed").innerHTML = "Scale: "+that.scale;
+      doc.getElementById("zoomed").innerHTML = that.scale;
       //--
 
 			that.x = that.originX - that.originX * that.lastScale + that.x;

@@ -43,8 +43,9 @@
             var yOImage = $("#pos-y").text();
             if(xOImage=="") xOImage=0;
             if(yOImage=="") yOImage=0;
-            var xImage = (parseFloat(xDiv)-parseFloat(xOImage));
-            var yImage = (parseFloat(yDiv)-parseFloat(yOImage));
+
+            var xImage = Math.floor((parseFloat(xDiv) - parseFloat(xOImage))/parseFloat(scale));
+            var yImage = Math.floor((parseFloat(yDiv) - parseFloat(yOImage))/parseFloat(scale));
             $('#x-touch').text("x-touched: "+ xImage.toString());
             $('#y-touch').text("y-touched: "+ yImage.toString());
 
@@ -52,8 +53,10 @@
                 scale: scale,
                 xImageTouch: xImage,
                 yImageTouch: yImage,
-                xDiv: event.clientX,
-                yDiv: event.clientY
+                xDiv: xDiv,
+                yDiv: yDiv,
+                xOImage: xOImage,
+                yOImage: yOImage
             }
             choiceSegment(touchInfo);
         })
