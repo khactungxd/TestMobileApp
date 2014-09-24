@@ -3,10 +3,10 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="js/jquery-1.7.1.min.js"></script>
-    <script src="js/iscroll.js"></script>
-    <script src="js/drawSegmentSelected.js"></script>
-    <!--<script src="js/jquery.mobile-1.4.2.min.js"></script>-->
+    <script src="/js/jquery-1.7.1.min.js"></script>
+    <script src="/js/iscroll.js"></script>
+    <script src="/js/drawSegmentSelected.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
 </head>
 
@@ -33,29 +33,32 @@
 </body>
 
 <script>
-    $('#wrapper').bind('click', function(event){
-        var scale = $("#zoomed").text();
-        if(scale=="") scale = 1;
-        var xDiv = event.clientX - $('#wrapper').position().left;
-        var yDiv = event.clientY - $('#wrapper').position().top;
-        var xOImage = $("#pos-x").text();
-        var yOImage = $("#pos-y").text();
-        if(xOImage=="") xOImage=0;
-        if(yOImage=="") yOImage=0;
-        var xImage = (parseFloat(xDiv)-parseFloat(xOImage));
-        var yImage = (parseFloat(yDiv)-parseFloat(yOImage));
-        $('#x-touch').text("x-touched: "+ xImage.toString());
-        $('#y-touch').text("y-touched: "+ yImage.toString());
+    $(document).ready(function () {
+        $('#wrapper').bind('click', function(event){
+            var scale = $("#zoomed").text();
+            if(scale=="") scale = 1;
+            var xDiv = event.clientX - $('#wrapper').position().left;
+            var yDiv = event.clientY - $('#wrapper').position().top;
+            var xOImage = $("#pos-x").text();
+            var yOImage = $("#pos-y").text();
+            if(xOImage=="") xOImage=0;
+            if(yOImage=="") yOImage=0;
+            var xImage = (parseFloat(xDiv)-parseFloat(xOImage));
+            var yImage = (parseFloat(yDiv)-parseFloat(yOImage));
+            $('#x-touch').text("x-touched: "+ xImage.toString());
+            $('#y-touch').text("y-touched: "+ yImage.toString());
 
-        var touchInfo = {
-            scale: scale,
-            xImageTouch: xImage,
-            yImageTouch: yImage,
-            xDiv: event.clientX,
-            yDiv: event.clientY
-        }
-        choiceSegment(touchInfo);
-    })
+            var touchInfo = {
+                scale: scale,
+                xImageTouch: xImage,
+                yImageTouch: yImage,
+                xDiv: event.clientX,
+                yDiv: event.clientY
+            }
+            choiceSegment(touchInfo);
+        })
+    });
+
 </script>
 <script>loaded();</script>
 

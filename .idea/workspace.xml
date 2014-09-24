@@ -23,19 +23,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="app.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="app.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="27" selection-start="280" selection-end="280" vertical-scroll-proportion="0.30478087" vertical-offset="0" max-vertical-offset="502">
+            <state line="18" column="3" selection-start="595" selection-end="595" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/public/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="34" selection-start="1568" selection-end="1568" vertical-scroll-proportion="-5.230769" vertical-offset="612" max-vertical-offset="1139">
+            <state line="35" column="0" selection-start="1122" selection-end="2142" vertical-scroll-proportion="0.10714286" vertical-offset="544" max-vertical-offset="1190">
               <folding>
                 <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
                 <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
@@ -56,7 +56,7 @@
       <file leaf-file-name="iscroll.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/iscroll.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="306" column="41" selection-start="10072" selection-end="10081" vertical-scroll-proportion="-6.84" vertical-offset="4980" max-vertical-offset="18955">
+            <state line="306" column="41" selection-start="10072" selection-end="10081" vertical-scroll-proportion="-206.04" vertical-offset="0" max-vertical-offset="18955">
               <folding />
             </state>
           </provider>
@@ -101,9 +101,9 @@
         <option value="$PROJECT_DIR$/views/index.html" />
         <option value="$PROJECT_DIR$/public/js/iscroll.js" />
         <option value="$PROJECT_DIR$/public/js/drawSecmentSelected.js" />
-        <option value="$PROJECT_DIR$/public/index.html" />
         <option value="$PROJECT_DIR$/public/js/drawSegmentSelected.js" />
         <option value="$PROJECT_DIR$/app.js" />
+        <option value="$PROJECT_DIR$/public/index.html" />
       </list>
     </option>
   </component>
@@ -392,9 +392,16 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="18" column="3" selection-start="595" selection-end="595" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="408">
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/public/js/iscroll.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="306" column="41" selection-start="10072" selection-end="10081" vertical-scroll-proportion="-6.84" vertical-offset="4980" max-vertical-offset="18955">
+        <state line="306" column="41" selection-start="10072" selection-end="10081" vertical-scroll-proportion="-206.04" vertical-offset="0" max-vertical-offset="18955">
           <folding />
         </state>
       </provider>
@@ -408,18 +415,11 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/public/index.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="44" column="34" selection-start="1568" selection-end="1568" vertical-scroll-proportion="-5.230769" vertical-offset="612" max-vertical-offset="1139">
+        <state line="35" column="0" selection-start="1122" selection-end="2142" vertical-scroll-proportion="0.10714286" vertical-offset="544" max-vertical-offset="1190">
           <folding>
             <element signature="n#style#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
             <element signature="n#style#0;n#div#0;n#div#1;n#body#0;n#html#0;n#!!top" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="27" selection-start="280" selection-end="280" vertical-scroll-proportion="0.30478087" vertical-offset="0" max-vertical-offset="502">
-          <folding />
         </state>
       </provider>
     </entry>
