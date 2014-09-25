@@ -305,6 +305,7 @@ iScroll.prototype = {
     //modifire by Tung
     doc.getElementById("pos-x").innerHTML  = x.toString();
     doc.getElementById("pos-y").innerHTML  = y.toString();
+    $("#segment-selected").css({width:'0px', height:'0px', display: 'none'});
 
 		this._scrollbarPos('h');
 		this._scrollbarPos('v');

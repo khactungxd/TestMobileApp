@@ -3,37 +3,47 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <script src="js/jquery-1.7.1.min.js"></script>
+    <!--<script src="js/jquery-1.7.1.min.js"></script>-->
+    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">-->
+    <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css">
+    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
+    <!--<script src="js/jquery.mobile-1.4.2.min.js"></script>-->
     <script src="js/iscroll.js"></script>
     <script src="js/drawSegmentSelected.js"></script>
-    <script src="js/jquery.mobile-1.4.2.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <script type="text/javascript">
+        var myScroll;
+        function loaded() {
+            myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 4 });
+        }
+        document.addEventListener('DOMContentLoaded', loaded, false);
+    </script>
 </head>
-
 <body>
-<script type="text/javascript">
-    var myScroll;
-    function loaded() {
-        myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 4 });
-    }
-    document.addEventListener('DOMContentLoaded', loaded, false);
-</script>
-<div id="ruler">
-    <img src="images/ruler.JPG">
-</div>
-<div id="wrapper" style="position:relative; height: 500px; width: 600px">
-    <img tyle="position:absolute" src="images/Hydrangeas.jpg" alt="">
-    <div id="segment-selected" style="position:absolute"></div>
-</div>
-<p id="pos-x"></p>
-<p id="pos-y"></p>
-<p id="zoomed"></p>
-<p id="x-touch"></p>
-<p id="y-touch"></p>
+    <div data-role="header" data-position="fixed" data-tap-toggle="false">
+        <h1>header</h1>
+    </div>
+    <div data-scroll="false" id="wrapper" style="position:relative; height: 500px; width: 600px">
+        <img tyle="position:absolute" src="images/Hydrangeas.jpg" alt="">
+        <div id="segment-selected" style="position:absolute"></div>
+    </div>
+    <p id="pos-x"></p>
+    <p id="pos-y"></p>
+    <p id="zoomed"></p>
+    <p id="x-touch"></p>
+    <p id="y-touch"></p>
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+        <h1>footer</h1>
+    </div>
 </body>
-
+<script>loaded();</script>
 <script>
     $(document).ready(function () {
+        $(document).bind('touchmove', function(e) {
+            e.preventDefault();
+        });
+
         $('#wrapper img').bind('click', function(event){
             var scale = $("#zoomed").text();
             if(scale=="") scale = 1;
@@ -58,11 +68,9 @@
                 xOImage: xOImage,
                 yOImage: yOImage
             }
-            choiceSegment(touchInfo);
+            drawSegment(touchInfo);
         })
     });
 
 </script>
-<script>loaded();</script>
-
 </html>
