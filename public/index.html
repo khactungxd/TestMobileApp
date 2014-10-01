@@ -3,19 +3,16 @@
 <head>
     <title></title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!--<script src="js/jquery-1.7.1.min.js"></script>-->
-    <!--<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.css">-->
     <link rel="stylesheet" href="css/jquery.mobile-1.4.2.min.css">
-    <script src="http://code.jquery.com/jquery-1.10.2.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.4.2/jquery.mobile-1.4.2.min.js"></script>
-    <!--<script src="js/jquery.mobile-1.4.2.min.js"></script>-->
+    <script src="js/jquery-1.7.1.min.js"></script>
+    <script src="js/jquery.mobile-1.4.2.min.js"></script>
     <script src="js/iscroll.js"></script>
     <script src="js/drawSegmentSelected.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <script type="text/javascript">
         var myScroll;
         function loaded() {
-            myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 4 });
+            myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 6 });
         }
         document.addEventListener('DOMContentLoaded', loaded, false);
     </script>
@@ -24,7 +21,7 @@
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>header</h1>
     </div>
-    <div data-scroll="false" id="wrapper" style="position:relative; height: 500px; width: 600px">
+    <div data-scroll="false" id="wrapper" style="position:relative;height: 2000px; width: 99%">
         <img tyle="position:absolute" src="images/Hydrangeas.jpg" alt="">
         <div id="segment-selected" style="position:absolute"></div>
     </div>
@@ -44,7 +41,40 @@
             e.preventDefault();
         });
 
+        $('#wrapper img').bind('touchmove', function(e) {
+            console.log(e);
+            $.ajax({
+                url: "http://localhost:3200/touchmove",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({ClientWidth: e.currentTarget.ClientWidth, ClientHeight: e.currentTarget.ClientHeight, ClientTop: e.currentTarget.ClientTop, ClientLeft: e.currentTarget.ClientLeft}),
+                success: function(data) {
+                    console.log(data);
+                    console.log('process sucess');
+                },
+
+                error: function() {
+                    console.log('process error');
+                }
+            });
+        });
+
         $('#wrapper img').bind('click', function(event){
+            $.ajax({
+                url: "http://localhost:3200/touchimage",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify({x: event.clientX, y: event.clientY}),
+                success: function(data) {
+                    console.log(data);
+                    console.log('process sucess');
+                },
+
+                error: function() {
+                    console.log('process error');
+                }
+            });
+
             var scale = $("#zoomed").text();
             if(scale=="") scale = 1;
             var xDiv = event.clientX - $('#wrapper').position().left;
