@@ -1,5 +1,5 @@
-var segments = [[45,45,10,10],[145,45,10,10],[45,95,10,10],[145,95,10,10],[95,45,10,10],[95,95,10,10]]
-var distanceMax = 50;
+var segments = [[45,45,10,10],[95,45,10,10],[145,45,10,10],[45,95,10,10],[95,95,10,10],[145,95,10,10]]
+var distanceMax = 5;
 
 
 
@@ -8,17 +8,18 @@ function drawSegment(event){
   for(var i = 0; i < segments.length; i++){
     var distance = 0;
     //if touch in segment
-    var width = segments[i][2]*event.scale;
-    var height = segments[i][3]*event.scale;
+    var width = segments[i][2];
+    var height = segments[i][3];
     var disx = segments[i][0]+width;
     var disy = segments[i][1]+height;
     if(event.xImageTouch >= segments[i][0] && event.xImageTouch <= disx && event.yImageTouch >= segments[i][1] && event.yImageTouch <= disy){
       found = true;
+      $('#index').text("segment: "+i);
       var xDraw = Math.floor((parseFloat(segments[i][0])*parseFloat(event.scale))+parseFloat(event.xOImage));
       var yDraw = Math.floor((parseFloat(segments[i][1])*parseFloat(event.scale))+parseFloat(event.yOImage));
-      $("#segment-selected").css({width:width+'px', height:height+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
+      $("#segment-selected").css({width:width*event.scale+'px', height:height*event.scale+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
     }
-    else{
+    else{// find segment near touch
       // calculator distance both touch and segment
       if(event.xImageTouch < segments[i][0]){
         // LEFT
@@ -29,7 +30,6 @@ function drawSegment(event){
           distance = Math.sqrt(distanceX*distanceX+distanceY*distanceY);
           if(segments[i][4]==undefined) segments[i].push(distance);
           else segments[i][4] = distance;
-
         }else{
           if( event.yImageTouch < disy){
             // left
@@ -87,8 +87,8 @@ function drawSegment(event){
       }
     }
   }
+//  found segment and draw with distance < distanceMax
   if(!found){
-    // found segment and draw with distance < distanceMax
     var distanceMin = 0;
     var segment = [];
     for(var j = 0; j < segments.length; j++){
@@ -100,12 +100,14 @@ function drawSegment(event){
     }
     if(distanceMin <= distanceMax*event.scale){
       // Draw
+      $("#distance").text(distanceMin+" of segment: "+segment);
       var width = segment[2]*event.scale;
       var height = segment[3]*event.scale;
       var xDraw = Math.floor((parseFloat(segment[0])*parseFloat(event.scale))+parseFloat(event.xOImage));
       var yDraw = Math.floor((parseFloat(segment[1])*parseFloat(event.scale))+parseFloat(event.yOImage));
       $("#segment-selected").css({width:width+'px', height:height+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
+    }else{
+      $("#segment-selected").css({display: "none"});
     }
-
   }
 }

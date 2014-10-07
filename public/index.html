@@ -11,84 +11,134 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
     <script type="text/javascript">
         var myScroll;
+        var initScaleTodo, currentScaleTodo;
         function loaded() {
-            myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 6 });
+            myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 15 });
         }
         document.addEventListener('DOMContentLoaded', loaded, false);
+        window.addEventListener('orientationchange', doOnOrientationChange);
+        function doOnOrientationChange()
+        {
+            $('#wrapper').css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
+        }
+
+        function postTouchimage(Object){
+            $.ajax({
+                url: "http://localhost:3200/touchimage",
+                type: "POST",
+                contentType: "application/json",
+                data: JSON.stringify(Object),
+                success: function(data) {
+                    console.log('process sucess');
+                },
+
+                error: function() {
+                    console.log('process error');
+                }
+            });
+        }
+
+        function calculatorImageInit(divElement, imgElement){
+            // calculator coordinates of image to nice
+            var initScaleY = divElement.height() / imgElement.height();
+            var initScaleX = divElement.width() / imgElement.width();
+            if(initScaleX <= initScaleY){
+                initScaleTodo = initScaleX;
+            }else{
+                initScaleTodo = initScaleY;
+            }
+            if(initScaleTodo > 1){
+                // set top,left # 0
+            }else{
+                //set top,left = 0
+            }
+        }
+
+        function calculatorImageZoom(divElement, imgElement){
+            // calculator coordinates of image when use Zoom image
+
+        }
     </script>
 </head>
 <body>
     <div data-role="header" data-position="fixed" data-tap-toggle="false">
         <h1>header</h1>
     </div>
-    <div data-scroll="false" id="wrapper" style="position:relative;height: 2000px; width: 99%">
-        <img tyle="position:absolute" src="images/Hydrangeas.jpg" alt="">
+    <div data-scroll="false" id="wrapper" style="position:relative">
+        <img id="imgDocument" style="position:absolute" src="images/Hydrangeas.jpg" alt="">
         <div id="segment-selected" style="position:absolute"></div>
     </div>
-    <p id="pos-x"></p>
-    <p id="pos-y"></p>
-    <p id="zoomed"></p>
-    <p id="x-touch"></p>
-    <p id="y-touch"></p>
-    <div data-role="footer" data-position="fixed" data-tap-toggle="false">
+    <div style="display: none">
+        <p id="pos-x" style="display: none"></p>
+        <p id="pos-y" style="display: none"></p>
+        <p id="zoomed" style="display: none"></p>
+        <p id="x-touch" style="display: none"></p>
+        <p id="y-touch" style="display: none"></p>
+        <p id="index" style="display: none"></p>
+        <p id="distance" style="display: none"></p>
+    </div>
+
+    <div data-role="footer" data-position="fixed" data-tap-toggle="false" id="footer">
         <h1>footer</h1>
     </div>
 </body>
 <script>loaded();</script>
 <script>
+    var initScale, imgHeight, imgWidth;
+    var initAdjustment=false;
     $(document).ready(function () {
+        $('#wrapper').css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
+        var anh=$('#anh');
+        var xPadding = 0;
+        var yPadding = 0;
+        anh.load(function() {
+            if (initAdjustment) return;
+            initAdjustment=true;
+            // set Init ZOOM image
+            var initScaleY = $('#wrapper').height()/ anh.height();
+            var initScaleX = $('#wrapper').width()/ anh.width();
+//            if(initScaleX == 1 || initScaleY == 1) return;
+            if(initScaleY <= initScaleX){
+                if(initScaleY != 1) initScale = initScaleY;
+                xPadding = Math.floor(($('#wrapper').width() - $('#wrapper img').width()*initScale)/2);
+                console.log("$('#wrapper').width(): before ",$('#wrapper').width());
+                $('#wrapper img').css({left: xPadding+'px'});
+                $('#wrapper img').css({height: initScaleY * $('#wrapper img').height()+'px'});
+                console.log("xpadding: ",xPadding);
+                console.log("$('#wrapper').width(): ",$('#wrapper').width());
+
+            }else{
+                if(initScaleX != 1) initScale = initScaleX;
+                yPadding = Math.floor(($('#wrapper').height() - $('#wrapper img').height()*initScale)/2);
+                $('#wrapper img').css({top: yPadding+'px'});
+                $('#wrapper img').css({width: initScaleX * $('#wrapper img').width()+'px'});
+
+            }
+        });
+
         $(document).bind('touchmove', function(e) {
             e.preventDefault();
         });
 
-        $('#wrapper img').bind('touchmove', function(e) {
-            console.log(e);
-            $.ajax({
-                url: "http://localhost:3200/touchmove",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({ClientWidth: e.currentTarget.ClientWidth, ClientHeight: e.currentTarget.ClientHeight, ClientTop: e.currentTarget.ClientTop, ClientLeft: e.currentTarget.ClientLeft}),
-                success: function(data) {
-                    console.log(data);
-                    console.log('process sucess');
-                },
-
-                error: function() {
-                    console.log('process error');
-                }
-            });
-        });
-
         $('#wrapper img').bind('click', function(event){
-            $.ajax({
-                url: "http://localhost:3200/touchimage",
-                type: "POST",
-                contentType: "application/json",
-                data: JSON.stringify({x: event.clientX, y: event.clientY}),
-                success: function(data) {
-                    console.log(data);
-                    console.log('process sucess');
-                },
-
-                error: function() {
-                    console.log('process error');
-                }
-            });
-
-            var scale = $("#zoomed").text();
-            if(scale=="") scale = 1;
+            var scale = $("#zoomed").text()*initScale;
+            if(scale=="") scale = initScale;
+            console.log("scale",scale);
+            console.log("xPadding",xPadding);
+            console.log("yPadding",yPadding);
             var xDiv = event.clientX - $('#wrapper').position().left;
             var yDiv = event.clientY - $('#wrapper').position().top;
-            var xOImage = $("#pos-x").text();
-            var yOImage = $("#pos-y").text();
+            var xOImage = $("#pos-x").text()+xPadding;
+            var yOImage = $("#pos-y").text()+yPadding;
             if(xOImage=="") xOImage=0;
             if(yOImage=="") yOImage=0;
-
             var xImage = Math.floor((parseFloat(xDiv) - parseFloat(xOImage))/parseFloat(scale));
             var yImage = Math.floor((parseFloat(yDiv) - parseFloat(yOImage))/parseFloat(scale));
             $('#x-touch').text("x-touched: "+ xImage.toString());
             $('#y-touch').text("y-touched: "+ yImage.toString());
-
+            console.log('ximage',xImage);
+            console.log('yimage',yImage);
+            postTouchimage({x: xImage, y: yImage, scale: scale, xPadding: xPadding, yPadding: yPadding});
             var touchInfo = {
                 scale: scale,
                 xImageTouch: xImage,
