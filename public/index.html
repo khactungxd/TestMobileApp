@@ -12,14 +12,23 @@
     <script type="text/javascript">
         var myScroll;
         var initScaleTodo, currentScaleTodo;
+        var xPadding = 0;
+        var yPadding = 0;
+        var initAdjustment=false;
         function loaded() {
             myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 15 });
         }
         document.addEventListener('DOMContentLoaded', loaded, false);
         window.addEventListener('orientationchange', doOnOrientationChange);
+        document.on("changed" , "#zoomed", function(){
+            alert('tung');
+        });
         function doOnOrientationChange()
         {
-            $('#wrapper').css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
+            location.reload();
+//            initAdjustment = false;
+//            $('#wrapper').css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
+            calculatorImageInit($('#wrapper'), $('#imgDocument'));
         }
 
         function postTouchimage(Object){
@@ -44,19 +53,41 @@
             var initScaleX = divElement.width() / imgElement.width();
             if(initScaleX <= initScaleY){
                 initScaleTodo = initScaleX;
+                yPadding = Math.floor((divElement.height() - imgElement.height()*initScaleTodo)/2);
+                imgElement.css({top: yPadding+'px'});
+                imgElement.css({width: initScaleTodo * imgElement.width()+'px'});
+
             }else{
                 initScaleTodo = initScaleY;
-            }
-            if(initScaleTodo > 1){
-                // set top,left # 0
-            }else{
-                //set top,left = 0
+                xPadding = Math.floor((divElement.width() - imgElement.width()*initScaleTodo)/2);
+                imgElement.css({left: xPadding+'px'});
+                imgElement.css({height: initScaleTodo * imgElement.height()+'px'});
             }
         }
 
-        function calculatorImageZoom(divElement, imgElement){
+        function adjustImagePosition(useScale){
             // calculator coordinates of image when use Zoom image
-
+            currentScaleTodo = initScaleTodo * useScale;
+            var divElement = $('#wrapper');
+            var imgElement = $('#imgDocument');
+            if(xPadding < yPadding){
+                // img current have top atribution
+                if(useScale * imgElement.height() < divElement.height()){
+                    yPadding = (divElement.height()-(useScale * imgElement.height()))/2;
+                    imgElement.css({top: yPadding+'px'})
+                }else{
+                    yPadding = 0;
+                    imgElement.css({top: '0px'})
+                }
+            }else{
+                if(useScale * imgElement.width() < divElement.width()){
+                    xPadding = (divElement.width()-(useScale * imgElement.width()))/2;
+                    imgElement.css({left: xPadding+'px'})
+                }else{
+                    xPadding = 0;
+                    imgElement.css({left: '0px'})
+                }
+            }
         }
     </script>
 </head>
@@ -71,7 +102,7 @@
     <div style="display: none">
         <p id="pos-x" style="display: none"></p>
         <p id="pos-y" style="display: none"></p>
-        <p id="zoomed" style="display: none"></p>
+        <p type="text" id="zoomed" style="display: none"></p>
         <p id="x-touch" style="display: none"></p>
         <p id="y-touch" style="display: none"></p>
         <p id="index" style="display: none"></p>
@@ -84,36 +115,15 @@
 </body>
 <script>loaded();</script>
 <script>
-    var initScale, imgHeight, imgWidth;
-    var initAdjustment=false;
     $(document).ready(function () {
-        $('#wrapper').css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
-        var anh=$('#anh');
-        var xPadding = 0;
-        var yPadding = 0;
-        anh.load(function() {
+        var imgElement=$('#imgDocument');
+        var divElement = $('#wrapper');
+        divElement.css({width: $(window).width()+"px", height: $(window).height()-90+"px"});
+        imgElement.load(function() {
             if (initAdjustment) return;
             initAdjustment=true;
             // set Init ZOOM image
-            var initScaleY = $('#wrapper').height()/ anh.height();
-            var initScaleX = $('#wrapper').width()/ anh.width();
-//            if(initScaleX == 1 || initScaleY == 1) return;
-            if(initScaleY <= initScaleX){
-                if(initScaleY != 1) initScale = initScaleY;
-                xPadding = Math.floor(($('#wrapper').width() - $('#wrapper img').width()*initScale)/2);
-                console.log("$('#wrapper').width(): before ",$('#wrapper').width());
-                $('#wrapper img').css({left: xPadding+'px'});
-                $('#wrapper img').css({height: initScaleY * $('#wrapper img').height()+'px'});
-                console.log("xpadding: ",xPadding);
-                console.log("$('#wrapper').width(): ",$('#wrapper').width());
-
-            }else{
-                if(initScaleX != 1) initScale = initScaleX;
-                yPadding = Math.floor(($('#wrapper').height() - $('#wrapper img').height()*initScale)/2);
-                $('#wrapper img').css({top: yPadding+'px'});
-                $('#wrapper img').css({width: initScaleX * $('#wrapper img').width()+'px'});
-
-            }
+            calculatorImageInit(divElement, imgElement);
         });
 
         $(document).bind('touchmove', function(e) {
@@ -121,26 +131,23 @@
         });
 
         $('#wrapper img').bind('click', function(event){
-            var scale = $("#zoomed").text()*initScale;
-            if(scale=="") scale = initScale;
-            console.log("scale",scale);
-            console.log("xPadding",xPadding);
-            console.log("yPadding",yPadding);
+            currentScaleTodo = $("#zoomed").text()*initScaleTodo;
+            if(currentScaleTodo=="") currentScaleTodo = initScaleTodo;
             var xDiv = event.clientX - $('#wrapper').position().left;
             var yDiv = event.clientY - $('#wrapper').position().top;
             var xOImage = $("#pos-x").text()+xPadding;
             var yOImage = $("#pos-y").text()+yPadding;
             if(xOImage=="") xOImage=0;
             if(yOImage=="") yOImage=0;
-            var xImage = Math.floor((parseFloat(xDiv) - parseFloat(xOImage))/parseFloat(scale));
-            var yImage = Math.floor((parseFloat(yDiv) - parseFloat(yOImage))/parseFloat(scale));
+            var xImage = Math.floor((parseFloat(xDiv) - parseFloat(xOImage))/parseFloat(currentScaleTodo));
+            var yImage = Math.floor((parseFloat(yDiv) - parseFloat(yOImage))/parseFloat(currentScaleTodo));
             $('#x-touch').text("x-touched: "+ xImage.toString());
             $('#y-touch').text("y-touched: "+ yImage.toString());
             console.log('ximage',xImage);
             console.log('yimage',yImage);
-            postTouchimage({x: xImage, y: yImage, scale: scale, xPadding: xPadding, yPadding: yPadding});
+            postTouchimage({x: xImage, y: yImage, scale: currentScaleTodo, xPadding: xPadding, yPadding: yPadding});
             var touchInfo = {
-                scale: scale,
+                scale: currentScaleTodo,
                 xImageTouch: xImage,
                 yImageTouch: yImage,
                 xDiv: xDiv,

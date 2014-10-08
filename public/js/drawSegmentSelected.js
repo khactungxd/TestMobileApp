@@ -98,13 +98,13 @@ function drawSegment(event){
         segment = segments[j];
       }
     }
-    if(distanceMin <= distanceMax*event.scale){
+    if(distanceMin <= distanceMax*event.currentScaleTodo){
       // Draw
       $("#distance").text(distanceMin+" of segment: "+segment);
-      var width = segment[2]*event.scale;
-      var height = segment[3]*event.scale;
-      var xDraw = Math.floor((parseFloat(segment[0])*parseFloat(event.scale))+parseFloat(event.xOImage));
-      var yDraw = Math.floor((parseFloat(segment[1])*parseFloat(event.scale))+parseFloat(event.yOImage));
+      var width = segment[2]*event.currentScaleTodo;
+      var height = segment[3]*event.currentScaleTodo;
+      var xDraw = Math.floor((parseFloat(segment[0])*parseFloat(event.currentScaleTodo))+parseFloat(event.xOImage));
+      var yDraw = Math.floor((parseFloat(segment[1])*parseFloat(event.currentScaleTodo))+parseFloat(event.yOImage));
       $("#segment-selected").css({width:width+'px', height:height+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
     }else{
       $("#segment-selected").css({display: "none"});

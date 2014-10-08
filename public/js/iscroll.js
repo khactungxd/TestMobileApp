@@ -538,6 +538,7 @@ iScroll.prototype = {
 
       // modifire by Tung
       doc.getElementById("zoomed").innerHTML = that.scale;
+      adjustImagePosition(that.scale);
       $("#segment-selected").css({display: "none"});
       //--
 
