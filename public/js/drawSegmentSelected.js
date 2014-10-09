@@ -1,5 +1,5 @@
 var segments = [[45,45,10,10],[95,45,10,10],[145,45,10,10],[45,95,10,10],[95,95,10,10],[145,95,10,10]]
-var distanceMax = 5;
+var distanceMax = 0;
 
 
 
@@ -14,7 +14,6 @@ function drawSegment(event){
     var disy = segments[i][1]+height;
     if(event.xImageTouch >= segments[i][0] && event.xImageTouch <= disx && event.yImageTouch >= segments[i][1] && event.yImageTouch <= disy){
       found = true;
-      $('#index').text("segment: "+i);
       var xDraw = Math.floor((parseFloat(segments[i][0])*parseFloat(event.scale))+parseFloat(event.xOImage));
       var yDraw = Math.floor((parseFloat(segments[i][1])*parseFloat(event.scale))+parseFloat(event.yOImage));
       $("#segment-selected").css({width:width*event.scale+'px', height:height*event.scale+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
@@ -98,13 +97,12 @@ function drawSegment(event){
         segment = segments[j];
       }
     }
-    if(distanceMin <= distanceMax*event.currentScaleTodo){
+    if(distanceMin <= distanceMax*event.scale){
       // Draw
-      $("#distance").text(distanceMin+" of segment: "+segment);
-      var width = segment[2]*event.currentScaleTodo;
-      var height = segment[3]*event.currentScaleTodo;
-      var xDraw = Math.floor((parseFloat(segment[0])*parseFloat(event.currentScaleTodo))+parseFloat(event.xOImage));
-      var yDraw = Math.floor((parseFloat(segment[1])*parseFloat(event.currentScaleTodo))+parseFloat(event.yOImage));
+      var width = segment[2]*event.scale;
+      var height = segment[3]*event.scale;
+      var xDraw = Math.floor((parseFloat(segment[0])*parseFloat(event.scale))+parseFloat(event.xOImage));
+      var yDraw = Math.floor((parseFloat(segment[1])*parseFloat(event.scale))+parseFloat(event.yOImage));
       $("#segment-selected").css({width:width+'px', height:height+'px', top:yDraw+'px', left:xDraw+"px", border: "3px solid red", display:"block"});
     }else{
       $("#segment-selected").css({display: "none"});

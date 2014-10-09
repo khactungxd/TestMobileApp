@@ -14,15 +14,29 @@
         var initScaleTodo, currentScaleTodo;
         var xPadding = 0;
         var yPadding = 0;
+        var xDrag = 0;
+        var yDrag = 0;
+        var useScale = 1;
         var initAdjustment=false;
-        function loaded() {
+
+        function deleteSegmentDraw(){
+            $("#segment-selected").css({width:'0px', height:'0px', display: 'none'});
+        }
+        function setDrag(xDragNew, yDragNew){
+            xDrag = xDragNew;
+            yDrag = yDragNew;
+        }
+
+        function setUseScale(useScaleNew){
+            useScale = useScaleNew;
+        }
+
+        function loadedIScroll() {
             myScroll = new iScroll('wrapper', { zoom: true, zoomMax: 15 });
         }
-        document.addEventListener('DOMContentLoaded', loaded, false);
+
+        document.addEventListener('DOMContentLoaded', loadedIScroll, false);
         window.addEventListener('orientationchange', doOnOrientationChange);
-        document.on("changed" , "#zoomed", function(){
-            alert('tung');
-        });
         function doOnOrientationChange()
         {
             location.reload();
@@ -65,23 +79,32 @@
             }
         }
 
-        function adjustImagePosition(useScale){
+        function adjustImagePosition(useScaleNew){
             // calculator coordinates of image when use Zoom image
-            currentScaleTodo = initScaleTodo * useScale;
+            useScale = useScaleNew;
+            currentScaleTodo = initScaleTodo * useScaleNew;
             var divElement = $('#wrapper');
             var imgElement = $('#imgDocument');
-            if(xPadding < yPadding){
+
+            if(xPadding <= yPadding){
                 // img current have top atribution
-                if(useScale * imgElement.height() < divElement.height()){
-                    yPadding = (divElement.height()-(useScale * imgElement.height()))/2;
+                if(useScaleNew * imgElement.height() < divElement.height()){
+                    yPadding = (divElement.height()-(useScaleNew * imgElement.height()))/2;
                     imgElement.css({top: yPadding+'px'})
                 }else{
                     yPadding = 0;
                     imgElement.css({top: '0px'})
                 }
+                if(useScaleNew * imgElement.width() < divElement.width()){
+                    xPadding = (divElement.width()-(useScaleNew * imgElement.width()))/2;
+                    imgElement.css({left: xPadding+'px'})
+                }else{
+                    xPadding = 0;
+                    imgElement.css({left: '0px'})
+                }
             }else{
-                if(useScale * imgElement.width() < divElement.width()){
-                    xPadding = (divElement.width()-(useScale * imgElement.width()))/2;
+                if(useScaleNew * imgElement.width() < divElement.width()){
+                    xPadding = (divElement.width()-(useScaleNew * imgElement.width()))/2;
                     imgElement.css({left: xPadding+'px'})
                 }else{
                     xPadding = 0;
@@ -99,21 +122,12 @@
         <img id="imgDocument" style="position:absolute" src="images/Hydrangeas.jpg" alt="">
         <div id="segment-selected" style="position:absolute"></div>
     </div>
-    <div style="display: none">
-        <p id="pos-x" style="display: none"></p>
-        <p id="pos-y" style="display: none"></p>
-        <p type="text" id="zoomed" style="display: none"></p>
-        <p id="x-touch" style="display: none"></p>
-        <p id="y-touch" style="display: none"></p>
-        <p id="index" style="display: none"></p>
-        <p id="distance" style="display: none"></p>
-    </div>
 
     <div data-role="footer" data-position="fixed" data-tap-toggle="false" id="footer">
         <h1>footer</h1>
     </div>
 </body>
-<script>loaded();</script>
+<script>loadedIScroll();</script>
 <script>
     $(document).ready(function () {
         var imgElement=$('#imgDocument');
@@ -131,20 +145,16 @@
         });
 
         $('#wrapper img').bind('click', function(event){
-            currentScaleTodo = $("#zoomed").text()*initScaleTodo;
+            currentScaleTodo = useScale*initScaleTodo;
             if(currentScaleTodo=="") currentScaleTodo = initScaleTodo;
             var xDiv = event.clientX - $('#wrapper').position().left;
             var yDiv = event.clientY - $('#wrapper').position().top;
-            var xOImage = $("#pos-x").text()+xPadding;
-            var yOImage = $("#pos-y").text()+yPadding;
+            var xOImage = xDrag+xPadding;
+            var yOImage = yDrag+yPadding;
             if(xOImage=="") xOImage=0;
             if(yOImage=="") yOImage=0;
             var xImage = Math.floor((parseFloat(xDiv) - parseFloat(xOImage))/parseFloat(currentScaleTodo));
             var yImage = Math.floor((parseFloat(yDiv) - parseFloat(yOImage))/parseFloat(currentScaleTodo));
-            $('#x-touch').text("x-touched: "+ xImage.toString());
-            $('#y-touch').text("y-touched: "+ yImage.toString());
-            console.log('ximage',xImage);
-            console.log('yimage',yImage);
             postTouchimage({x: xImage, y: yImage, scale: currentScaleTodo, xPadding: xPadding, yPadding: yPadding});
             var touchInfo = {
                 scale: currentScaleTodo,
@@ -158,6 +168,5 @@
             drawSegment(touchInfo);
         })
     });
-
 </script>
 </html>

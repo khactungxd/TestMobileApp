@@ -302,21 +302,10 @@ iScroll.prototype = {
 		this.x = x;
 		this.y = y;
 
-    //modifire by Tung
-    doc.getElementById("pos-x").innerHTML  = x.toString();
-    doc.getElementById("pos-y").innerHTML  = y.toString();
-    $("#segment-selected").css({width:'0px', height:'0px', display: 'none'});
-
-    $.ajax({
-      url: "http://localhost:3200/touchmove",
-      type: "POST",
-      contentType: "application/json",
-      data: JSON.stringify({xMove: x.toString(), yMove: y.toString()}),
-      success: function(data) {
-      },
-      error: function() {
-      }
-    });
+    // modifire by Tung
+    setDrag(x,y);
+    deleteSegmentDraw();
+    // end modifire by Tung
 
 		this._scrollbarPos('h');
 		this._scrollbarPos('v');
@@ -537,9 +526,8 @@ iScroll.prototype = {
 			that.scale = scale;
 
       // modifire by Tung
-      doc.getElementById("zoomed").innerHTML = that.scale;
       adjustImagePosition(that.scale);
-      $("#segment-selected").css({display: "none"});
+      deleteSegmentDraw();
       //--
 
 			that.x = that.originX - that.originX * that.lastScale + that.x;
